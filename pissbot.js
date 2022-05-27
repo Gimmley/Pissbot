@@ -516,7 +516,3 @@ catch(error)
     console.log("Error : " + error.stack())
     
 }
-
-function override(){
-    return true
-}
