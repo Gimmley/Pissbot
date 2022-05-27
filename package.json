@@ -2,11 +2,9 @@
   "name": "pissbot",
   "version": "1.0.0",
   "description": "A discord bot for a personal channel",
-  "main": "pissbot.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node pissbot.js",
-    "dev":"nodemon pissbot.js" 
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "discord"
