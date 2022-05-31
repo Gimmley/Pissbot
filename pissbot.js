@@ -146,7 +146,8 @@ const jtList = [
     "https://i.imgur.com/hKCy3c4.gif",
     "https://i.imgur.com/7HdlCKD.png",
     "https://i.imgur.com/1MLEdzr.png",
-    "https://i.imgur.com/5EjORk4.png"
+    "https://i.imgur.com/5EjORk4.png",
+    "https://i.imgur.com/T9W2lo0.gif"
 ];
 const samList = [
     "https://i.imgur.com/daW7PSK.png",
@@ -425,6 +426,15 @@ client.on("messageCreate", msg => {
         }
     }
 })
+//dm
+client.on('msg', () => {
+    if(msg.content === leadCharacter + "dm") {
+        let messageContent = msg.content.replace("!dm", "")
+        msg.member.send(messageContent)
+      }
+    if (msg.channel.type == 'dm' && msg.content.toLowerCase() == 'hi')
+      msg.channel.send('Please use !help for the commands list.')
+  })
 //help
 client.on("messageCreate", msg => {
     if (msg.content === leadCharacter + "help") {
@@ -433,7 +443,6 @@ client.on("messageCreate", msg => {
     //var error = new Error()
     //throw('error')
 })
-
 //supporting functions
 function getRandomPost(posts) {
     const randomIndex = randomInt(0, posts.length);
@@ -512,7 +521,5 @@ function randomInt(min, max) {
 }
 catch(error)
 {
-    
     console.log("Error : " + error.stack())
-    
 }
