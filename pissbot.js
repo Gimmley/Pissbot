@@ -42,7 +42,6 @@ const randhentai = [
       "r/Futanari",
       "r/overwatch_porn",
       "r/Ecchi",
-      "r/doujinshi",
       "r/DekaiHentai",
       "r/hentaimemes",
       "r/ChiisaiHentai",
