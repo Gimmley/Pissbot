@@ -263,8 +263,46 @@ client.on("messageCreate", msg => {
         }
     }
 })
+//history
+client.on('messageCreate', async (msg) => {
+  try{
+  if(msg.content === leadCharacter + "history" && msg.channel.name != badChannel){
+    var weirdCount = 0;
+    var nudeCount = 0;
+    var hentaiCount = 0;
+    var spiderCount = 0;
+    const array = await lots_of_messages_getter(msg.channel, 100)
+    array.forEach(message => {
+      if(message.content === "!getweird" && message.author.username === msg.author.username)
+      {
+        weirdCount++;
+      }
+      if(message.content === "!getnude" && message.author.username === msg.author.username)
+      {
+        nudeCount++;
+      }
+      if(message.content === "!gethentai" && message.author.username === msg.author.username)
+      {
+        hentaiCount++;
+      }
+      if(message.content === "!getspider" && message.author.username === msg.author.username)
+      {
+        spiderCount++;
+      }
+    });
+    msg.reply(msg.author.username + " has sent getweird " + weirdCount + " times." +
+    "\ngetnude " + nudeCount + " times."  +
+    "\ngethentai " + hentaiCount + " times."  +
+    "\ngetspider " + spiderCount + " times.")
+  }
+  }
+  catch(error)
+  {
+    msg.channel.send("Aww shit, you broke it!")
+  }   
+})
 //getweird
-client.on('messageCreate', msg => {
+client.on('messageCreate', async (msg) => {
     try{
     if(msg.content === leadCharacter + "getweird" && !getWierdEnabled){
         msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die.\nTry again when your message and this one is deleted!")
@@ -272,89 +310,56 @@ client.on('messageCreate', msg => {
         setTimeout(() => {msg.delete()}, 5000)
     }
     if (msg.content === leadCharacter + "getweird" && getWierdEnabled && msg.channel.name != badChannel) {
-      try{
-        axios
-          .get(redditBaseURL+getRandomItem(randwierd)+json)
-          .then((resp) => {
-            const {
-              title,
-              url,
-              subreddit_name_prefixed: subreddit
-            } = getRandomPost(resp.data.data.children);
-            getWierdEnabled = false
-            msg.channel.send(`${url}\n${subreddit}`);
-            setTimeout(() => {getWierdEnabled = true}, 5000)
-          })
-      }
-      catch(error)
-      {
-        msg.channel.send("Sorry reddit api is not being nice");
-      }
+        getWierdEnabled = false
+        await getRedditPost(randwierd,msg);
+        setTimeout(() => {getWierdEnabled = true}, 5000)
     }
   }
-    catch(error)
-        {
-            msg.channel.send("Sorry reddit api is not being nice");
-        }   
+  catch(error)
+  {
+    msg.channel.send("Sorry reddit api is not being nice");
+  }   
   })
 //getcute
-  client.on('messageCreate', msg => {
+  client.on('messageCreate', async (msg) => {
     if(msg.content === leadCharacter + "getcute" && !getCuteEnabled){
         msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die.\nTry again when your message and this one is deleted!")
         .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
         setTimeout(() => {msg.delete()}, 5000)
     }
     if (msg.content === leadCharacter + "getcute" && getCuteEnabled && msg.channel.name != badChannel) {
-        try{
-        axios
-          .get(redditBaseURL+getRandomItem(randCute)+json)
-          .then((resp) => {
-            const {
-              title,
-              url,
-              subreddit_name_prefixed: subreddit
-            } = getRandomPost(resp.data.data.children);
-            getCuteEnabled = false
-            msg.channel.send(`${url}\n${subreddit}`);
-            setTimeout(() => {getCuteEnabled = true}, 5000)
-          })
-        }
-        catch(error)
-        {
-            msg.channel.send("Sorry reddit api is not being nice");
-        }
+      try{
+          getCuteEnabled = false
+          await getRedditPost(randCute,msg);
+           setTimeout(() => {getCuteEnabled = true}, 5000)
+      }
+      catch(error)
+      {
+          msg.channel.send("Sorry reddit api is not being nice");
+      }
     }
   })
 //gethentai
-client.on('messageCreate', msg => {
+client.on('messageCreate', async (msg) => {
     if(msg.content === leadCharacter + "gethentai" && !getHentaiEnabled){
         msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die.\nTry again when your message and this one is deleted!")
         .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
         setTimeout(() => {msg.delete()}, 5000)
     }
     if (msg.content === leadCharacter + "gethentai" && getHentaiEnabled && msg.channel.name != badChannel) {
-        try{
-        axios
-          .get(redditBaseURL+getRandomItem(randhentai)+json)
-          .then((resp) => {
-            const {
-              title,
-              url,
-              subreddit_name_prefixed: subreddit
-            } = getRandomPost(resp.data.data.children);
-            getHentaiEnabled = false
-            msg.channel.send(`${url}\n${subreddit}`);
-            setTimeout(() => {getHentaiEnabled = true}, 5000)
-          })
-        }
-        catch(error)
-        {
-            msg.channel.send("Sorry reddit api is not being nice");
-        }
+     try{
+         getHentaiEnabled = false
+         await getRedditPost(randhentai,msg);
+         setTimeout(() => {getHentaiEnabled = true}, 5000)
+      }
+      catch(error)
+      {
+        msg.channel.send("Sorry reddit api is not being nice");
+      }
     }
   })
 //getnude
-client.on('messageCreate', msg => {
+client.on('messageCreate', async (msg) => {
     try{
     if(msg.content === leadCharacter + "getnude" && !getNudeEnabled){
         msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die. \nTry again when your message and this one is deleted!")
@@ -362,28 +367,18 @@ client.on('messageCreate', msg => {
         setTimeout(() => {msg.delete()}, 5000)
     }
     if (msg.content === leadCharacter + "getnude" && getNudeEnabled && msg.channel.name != badChannel) {
-        axios
-          .get(redditBaseURL+getRandomItem(randNsfw)+json)
-          .then((resp) => {
-            const {
-              title,
-              url,
-              subreddit_name_prefixed: subreddit
-            } = getRandomPost(resp.data.data.children);
             getNudeEnabled = false
-            msg.channel.send(`${url}\n${subreddit}`);
+            await getRedditPost(randNsfw,msg);
             setTimeout(() => {getNudeEnabled = true}, 5000)
-          })
         }
-
     }
     catch(error)
-        {
-            msg.channel.send("Sorry reddit api is not being nice");
-        }   
+    {
+      msg.channel.send("Sorry reddit api is not being nice");
+    }   
   })
 //getspider
-client.on('messageCreate', msg => {
+client.on('messageCreate', async (msg) => {
     try{
     if(msg.content === leadCharacter + "getspider" && !getSpiderEnabled){
         msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die. \nTry again when your message and this one is deleted!")
@@ -391,44 +386,80 @@ client.on('messageCreate', msg => {
         setTimeout(() => {msg.delete()}, 5000)
     }
     if (msg.content === leadCharacter + "getspider" && getSpiderEnabled && msg.channel.name != badChannel) {
-        axios
-          .get(redditBaseURL+getRandomItem(randSpiders)+json)
-          .then((resp) => {
-            const {
-              title,
-              url,
-              subreddit_name_prefixed: subreddit
-            } = getRandomPost(resp.data.data.children);
-            getSpiderEnabled = false
-            msg.channel.send(`${url}\n${subreddit}`);
-            setTimeout(() => {getSpiderEnabled = true}, 5000)
-          })
-        }
-
+      getSpiderEnabled = false
+      await getRedditPost(randSpiders,msg);
+      setTimeout(() => {getSpiderEnabled = true}, 5000)
+      }
     }
     catch(error)
-        {
-            msg.channel.send("Sorry reddit api is not being nice");
-        }   
+    {
+      msg.channel.send("Sorry reddit api is not being nice");
+    }   
   })
 //help
 client.on("messageCreate", msg => {
     if (msg.content === leadCharacter + "help") {
-        msg.channel.send("wooky - replies wooky\nsam - sam pics\nlukas - lukas pics\njt - jt pics\nmackenzie - mackenzie pics\nhaley - haley pics\npaul - paul pics \nrats - rat pics\ngeg- it geg\ngetwierd - get's wierd reddit posts\ngetcute - gets cute reddit posts \ngetnude - gets nude reddit posts\ngetspider - gets spider reddit posts\nrolld20 - roll one 20 sided dice")
+        msg.channel.send("wooky - replies wooky\nsam - sam pics\nlukas - lukas pics\njt - jt pics\nmackenzie - mackenzie pics\nhaley - haley pics\npaul - paul pics \nrats - rat pics\ngeg- it geg\ngetwierd - get's wierd reddit posts\ngetcute - gets cute reddit posts \ngetnude - gets nude reddit posts\ngetspider - gets spider reddit posts\nrolld20 - roll one 20 sided dice\nhistory - get's your history of this bots use in this channel")
     }
 })
+
 //supporting functions
+const { Collection } = require('discord.js');
+
+async function lots_of_messages_getter(channel, limit = 10000) {
+  const sum_messages = [];
+  let last_id;
+  
+  while (true) {
+      const options = { limit: 100 };
+      if (last_id) {
+          options.before = last_id;
+      }
+  
+      const messages = await channel.messages.fetch(options);
+      sum_messages.push(...messages.values());
+      last_id = messages.last().id;
+  
+      if (messages.size != 100 || sum_messages >= limit) {
+          break;
+      }
+  }
+  
+  return sum_messages;
+}
+
+async function getRedditPost(listName,msg){
+  try{
+    axios
+        .get(redditBaseURL+getRandomItem(listName)+json)
+        .then((resp) => {
+          const {
+            title,
+            url,
+            subreddit_name_prefixed: subreddit
+          } = getRandomPost(resp.data.data.children);
+          //return `${url}\n${subreddit}`;
+          msg.channel.send(`${url}\n${subreddit}`);
+          return;
+          })
+      }
+      catch(error)
+      {
+        return "Sorry reddit api is not being nice"
+      }
+}
+
 function getRandomPost(posts) {
     const randomIndex = randomInt(0, posts.length);
     return posts[randomIndex].data;
-  }
+}
 
 function getRandomItem(list){
     const randomIndex = randomInt(0, list.length);
     return list[randomIndex]
-  }
+}
 
-  function getNumbOokies() {
+function getNumbOokies() {
       let ran = randomInt(2,50)
       ookieChance = .80
       if(ran > 40)
@@ -491,7 +522,7 @@ function formOokie() {
 
 function randomInt(min, max) {
     return (Math.floor(Math.random() * (max - min))) + min;
-  }
+}
 }
 catch(error)
 {
