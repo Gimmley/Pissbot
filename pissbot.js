@@ -17,7 +17,15 @@ client.login(process.env.DISCORD_TOKEN)
 
 //variable block
 const leadCharacter = "!"
-
+const json = "/.json"
+const badChannel = "wookus-lovers-anon"
+var getWierdEnabled = true;
+var getCuteEnabled = true;
+var getNudeEnabled = true;
+var getSpiderEnabled = true;
+var getHentaiEnabled = true;
+var ookieChance = .00
+var ookies = 0
 const redditBaseURL = "https://reddit.com/"
 const randwierd = [
     "r/dragonsfuckingcars",
@@ -156,16 +164,6 @@ const samList = [
     "https://i.imgur.com/PhTqspN.jpg",
     "https://i.imgur.com/zoKOq5V.jpg"
 ];
-const json = "/.json"
-const badChannel = "wookus-lovers-anon"
-var getWierdEnabled = true;
-var getCuteEnabled = true;
-var getNudeEnabled = true;
-var getSpiderEnabled = true;
-var getHentaiEnabled = true;
-var ookieChance = .00
-var ookies = 0
-
 
 //calls
 try{
@@ -301,105 +299,61 @@ client.on('messageCreate', async (msg) => {
     msg.channel.send("Aww shit, you broke it!")
   }   
 })
-//getweird
+//allgets
 client.on('messageCreate', async (msg) => {
-    try{
-    if(msg.content === leadCharacter + "getweird" && !getWierdEnabled){
-        msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die.\nTry again when your message and this one is deleted!")
-        .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
-        setTimeout(() => {msg.delete()}, 5000)
-    }
-    if (msg.content === leadCharacter + "getweird" && getWierdEnabled && msg.channel.name != badChannel) {
-        getWierdEnabled = false
-        await getRedditPost(randwierd,msg);
-        setTimeout(() => {getWierdEnabled = true}, 5000)
+try{
+  if (msg.content === leadCharacter + "getweird" && msg.channel.name != badChannel) {
+    if(canGet(getWierdEnabled, msg)){
+      getWierdEnabled = false
+      await getRedditPost(randwierd,msg);
+      setTimeout(() => {getWierdEnabled = true}, 5000)
     }
   }
-  catch(error)
-  {
-    msg.channel.send("Sorry reddit api is not being nice");
-  }   
-  })
-//getcute
-  client.on('messageCreate', async (msg) => {
-    if(msg.content === leadCharacter + "getcute" && !getCuteEnabled){
-        msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die.\nTry again when your message and this one is deleted!")
-        .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
-        setTimeout(() => {msg.delete()}, 5000)
+  if (msg.content === leadCharacter + "getcute" && msg.channel.name != badChannel) {
+    if(canGet(getCuteEnabled, msg)){
+      getCuteEnabled = false
+      await getRedditPost(randCute,msg);
+      setTimeout(() => {getCuteEnabled = true}, 5000)
     }
-    if (msg.content === leadCharacter + "getcute" && getCuteEnabled && msg.channel.name != badChannel) {
-      try{
-          getCuteEnabled = false
-          await getRedditPost(randCute,msg);
-           setTimeout(() => {getCuteEnabled = true}, 5000)
-      }
-      catch(error)
-      {
-          msg.channel.send("Sorry reddit api is not being nice");
-      }
+  }
+  if (msg.content === leadCharacter + "gethentai" && msg.channel.name != badChannel) {
+    if(canGet(getHentaiEnabled, msg)){
+      getHentaiEnabled = false
+      await getRedditPost(randhentai,msg);
+      setTimeout(() => {getHentaiEnabled = true}, 5000)
     }
-  })
-//gethentai
-client.on('messageCreate', async (msg) => {
-    if(msg.content === leadCharacter + "gethentai" && !getHentaiEnabled){
-        msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die.\nTry again when your message and this one is deleted!")
-        .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
-        setTimeout(() => {msg.delete()}, 5000)
+  }
+  if (msg.content === leadCharacter + "getnude" && msg.channel.name != badChannel) {
+    if(canGet(getNudeEnabled, msg)){
+      getNudeEnabled = false
+      await getRedditPost(randNsfw,msg);
+      setTimeout(() => {getNudeEnabled = true}, 5000)
     }
-    if (msg.content === leadCharacter + "gethentai" && getHentaiEnabled && msg.channel.name != badChannel) {
-     try{
-         getHentaiEnabled = false
-         await getRedditPost(randhentai,msg);
-         setTimeout(() => {getHentaiEnabled = true}, 5000)
-      }
-      catch(error)
-      {
-        msg.channel.send("Sorry reddit api is not being nice");
-      }
-    }
-  })
-//getnude
-client.on('messageCreate', async (msg) => {
-    try{
-    if(msg.content === leadCharacter + "getnude" && !getNudeEnabled){
-        msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die. \nTry again when your message and this one is deleted!")
-        .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
-        setTimeout(() => {msg.delete()}, 5000)
-    }
-    if (msg.content === leadCharacter + "getnude" && getNudeEnabled && msg.channel.name != badChannel) {
-            getNudeEnabled = false
-            await getRedditPost(randNsfw,msg);
-            setTimeout(() => {getNudeEnabled = true}, 5000)
-        }
-    }
-    catch(error)
-    {
-      msg.channel.send("Sorry reddit api is not being nice");
-    }   
-  })
-//getspider
-client.on('messageCreate', async (msg) => {
-    try{
-    if(msg.content === leadCharacter + "getspider" && !getSpiderEnabled){
-        msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die. \nTry again when your message and this one is deleted!")
-        .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
-        setTimeout(() => {msg.delete()}, 5000)
-    }
-    if (msg.content === leadCharacter + "getspider" && getSpiderEnabled && msg.channel.name != badChannel) {
+  }
+  if (msg.content === leadCharacter + "getspider" && msg.channel.name != badChannel) {
+    if(canGet(getSpiderEnabled, msg)){
       getSpiderEnabled = false
       await getRedditPost(randSpiders,msg);
       setTimeout(() => {getSpiderEnabled = true}, 5000)
-      }
     }
-    catch(error)
-    {
-      msg.channel.send("Sorry reddit api is not being nice");
-    }   
-  })
+  }
+}
+catch(error)
+{
+    msg.channel.send("Sorry reddit api is not being nice");
+}
+})
 //help
 client.on("messageCreate", msg => {
     if (msg.content === leadCharacter + "help") {
-        msg.channel.send("wooky - replies wooky\nsam - sam pics\nlukas - lukas pics\njt - jt pics\nmackenzie - mackenzie pics\nhaley - haley pics\npaul - paul pics \nrats - rat pics\ngeg- it geg\ngetwierd - get's wierd reddit posts\ngetcute - gets cute reddit posts \ngetnude - gets nude reddit posts\ngetspider - gets spider reddit posts\nrolld20 - roll one 20 sided dice\nhistory - get's your history of this bots use in this channel")
+        msg.channel.send("wooky - replies wooky"+
+        "\nsam - sam pics\nlukas - lukas pics\njt - jt pics"+
+        "\nmackenzie - mackenzie pics\nhaley - haley pics\n"+
+        "paul - paul pics \nrats - rat pics\ngeg- it geg"+
+        "\ngetwierd - get's wierd reddit posts"+
+        "\ngetcute - gets cute reddit posts \ngetnude - gets nude reddit posts"+
+        "\ngetspider - gets spider reddit posts\nrolld20 - roll one 20 sided dice"+
+        "\nhistory - get's your history of this bots use in this channel\rroulette - russian roulette")
     }
 })
 
@@ -438,7 +392,6 @@ async function getRedditPost(listName,msg){
             url,
             subreddit_name_prefixed: subreddit
           } = getRandomPost(resp.data.data.children);
-          //return `${url}\n${subreddit}`;
           msg.channel.send(`${url}\n${subreddit}`);
           return;
           })
@@ -447,6 +400,16 @@ async function getRedditPost(listName,msg){
       {
         return "Sorry reddit api is not being nice"
       }
+}
+
+function canGet(enabled, msg){
+  if(!enabled){
+    msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die. \nTry again when your message and this one is deleted!")
+    .then(oldMessage => setTimeout(() => {oldMessage.delete()}, 5000))
+    setTimeout(() => {msg.delete()}, 5000)
+    return false
+}
+return true
 }
 
 function getRandomPost(posts) {
