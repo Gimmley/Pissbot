@@ -14,8 +14,8 @@ client.on('ready', function(e){
 // Authenticate
 client.login(process.env.DISCORD_TOKEN)
 
-
 //variable block
+const { Collection } = require('discord.js');
 const leadCharacter = "!"
 const json = "/.json"
 const badChannel = "wookus-lovers-anon"
@@ -223,40 +223,32 @@ client.on("messageCreate", msg => {
 client.on("messageCreate", msg => {
     if (msg.content === leadCharacter + "rolld20") {
         let num = randomInt(1,20)
-        if(num == 1)
-        {
+        if(num == 1){
             msg.channel.send(num.toString() + " - You literally shit your pants.")
         }
-        else if(num > 1 && num <=5)
-        {
+        else if(num > 1 && num <=5){
             msg.channel.send(num.toString() + " - That could have been much worse you idiot.")
         }
-        else if(num > 5 && num <=10)
-        {
+        else if(num > 5 && num <=10){
             msg.channel.send(num.toString() + " - Below average but eh.")
         }
-        else if(num > 10 && num <=15)
-        {
+        else if(num > 10 && num <=15){
             msg.channel.send(num.toString() + " - Above average, go you!")
         }
-        else if(num > 15 && num <=19)
-        {
+        else if(num > 15 && num <=19){
             msg.channel.send(num.toString() + " - Nice roll, but could be perfect!")
         }
-        else if(num == 20)
-        {
+        else if(num == 20){
             msg.channel.send(num.toString() + " - Holy shit I just came!")
         }
     }
     if (msg.content === leadCharacter + "roulette") {
         let num = randomInt(0,5)
-        if(num == 0)
-        {
+        if(num == 0){
             msg.channel.send({files: ["https://i.imgur.com/NDVxk6r.gif"]})
             msg.channel.send("You're dead")
         }
-        else
-        {
+        else{
             msg.channel.send("You live to see another day")
         }
     }
@@ -271,20 +263,16 @@ client.on('messageCreate', async (msg) => {
     var spiderCount = 0;
     const array = await lots_of_messages_getter(msg.channel, 100)
     array.forEach(message => {
-      if(message.content === "!getweird" && message.author.username === msg.author.username)
-      {
+      if(message.content === "!getweird" && message.author.username === msg.author.username){
         weirdCount++;
       }
-      if(message.content === "!getnude" && message.author.username === msg.author.username)
-      {
+      if(message.content === "!getnude" && message.author.username === msg.author.username){
         nudeCount++;
       }
-      if(message.content === "!gethentai" && message.author.username === msg.author.username)
-      {
+      if(message.content === "!gethentai" && message.author.username === msg.author.username){
         hentaiCount++;
       }
-      if(message.content === "!getspider" && message.author.username === msg.author.username)
-      {
+      if(message.content === "!getspider" && message.author.username === msg.author.username){
         spiderCount++;
       }
     });
@@ -294,8 +282,7 @@ client.on('messageCreate', async (msg) => {
     "\ngetspider " + spiderCount + " times.")
   }
   }
-  catch(error)
-  {
+  catch(error){
     msg.channel.send("Aww shit, you broke it!")
   }   
 })
@@ -338,8 +325,7 @@ try{
     }
   }
 }
-catch(error)
-{
+catch(error){
     msg.channel.send("Sorry reddit api is not being nice");
 }
 })
@@ -356,52 +342,45 @@ client.on("messageCreate", msg => {
         "\nhistory - get's your history of this bots use in this channel\rroulette - russian roulette")
     }
 })
-
 //supporting functions
-const { Collection } = require('discord.js');
-
 async function lots_of_messages_getter(channel, limit = 10000) {
-  const sum_messages = [];
+  const messagesList = [];
   let last_id;
-  
   while (true) {
-      const options = { limit: 100 };
+      const max = { limit: 100 };
       if (last_id) {
-          options.before = last_id;
+          max.before = last_id;
       }
   
-      const messages = await channel.messages.fetch(options);
-      sum_messages.push(...messages.values());
+      const messages = await channel.messages.fetch(max);
+      messagesList.push(...messages.values());
       last_id = messages.last().id;
   
-      if (messages.size != 100 || sum_messages >= limit) {
+      if (messages.size != 100 || messagesList >= limit) {
           break;
       }
   }
   
-  return sum_messages;
+  return messagesList;
 }
-
 async function getRedditPost(listName,msg){
   try{
-    axios
-        .get(redditBaseURL+getRandomItem(listName)+json)
-        .then((resp) => {
-          const {
-            title,
-            url,
-            subreddit_name_prefixed: subreddit
-          } = getRandomPost(resp.data.data.children);
-          msg.channel.send(`${url}\n${subreddit}`);
-          return;
-          })
-      }
-      catch(error)
-      {
-        return "Sorry reddit api is not being nice"
-      }
+  axios
+    .get(redditBaseURL+getRandomItem(listName)+json)
+    .then((resp) => {
+      const {
+      title,
+      url,
+      subreddit_name_prefixed: subreddit
+      } = getRandomPost(resp.data.data.children);
+      msg.channel.send(`${url}\n${subreddit}`);
+      return;
+      })
+  }
+  catch(error){
+    return "Sorry reddit api is not being nice"
+  }
 }
-
 function canGet(enabled, msg){
   if(!enabled){
     msg.channel.send("Wait 5 seconds between using the same command please! I don't want to die. \nTry again when your message and this one is deleted!")
@@ -411,83 +390,67 @@ function canGet(enabled, msg){
 }
 return true
 }
-
 function getRandomPost(posts) {
     const randomIndex = randomInt(0, posts.length);
     return posts[randomIndex].data;
 }
-
 function getRandomItem(list){
     const randomIndex = randomInt(0, list.length);
     return list[randomIndex]
 }
-
 function getNumbOokies() {
       let ran = randomInt(2,50)
       ookieChance = .80
-      if(ran > 40)
-      {
+      if(ran > 40){
         ran = randomInt(ran,100)
         ookieChance = .20
       }
-      if(ran > 90)
-      {
+      if(ran > 90){
         ran = randomInt(ran,150)
         ookieChance *= ookieChance
       }
-      if(ran > 140)
-      {
+      if(ran > 140){
         ran = randomInt(ran,200)
         ookieChance *= ookieChance
       }
-      if(ran > 190)
-      {
+      if(ran > 190){
         ran = randomInt(ran,250)
         ookieChance *= ookieChance
       }
-      if(ran > 240)
-      {
+      if(ran > 240){
         ran = randomInt(ran,300)
         ookieChance *= ookieChance
       }
-      if(ran > 290)
-      {
+      if(ran > 290){
         ran = randomInt(ran,350)
         ookieChance *= ookieChance
       }
-      if(ran > 340)
-      {
+      if(ran > 340){
         ran = randomInt(ran,400)
         ookieChance *= ookieChance
       }
-      if(ran > 390)
-      {
+      if(ran > 390){
         ran = randomInt(ran,450)
         ookieChance *= ookieChance
       }
-      if(ran > 440)
-      {
+      if(ran > 440){
         ran = randomInt(ran,500)
         ookieChance *= ookieChance
       }
     return ran
 }
-
 function formOokie() {
     ookies = getNumbOokies()
     let text = ""
-    for(let i = 0; i < ookies; i++)
-    {
+    for(let i = 0; i < ookies; i++){
         text += "O"
     }
     return text
 }
-
 function randomInt(min, max) {
     return (Math.floor(Math.random() * (max - min))) + min;
 }
 }
-catch(error)
-{
+catch(error){
     console.log("Error : " + error.stack())
 }
